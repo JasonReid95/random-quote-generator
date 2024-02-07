@@ -1,5 +1,6 @@
-// Creates newQuoteButton variable and stores a reference to the new quote button in index.html
+// Creates newQuoteButton and twitterButton variables and stores a reference to them in index.html
 const newQuoteButton = document.querySelector("#js-new-quote");
+const twitterButton = document.querySelector("#js-tweet");
 
 // Creates jsLoadIndicator variable and stores a reference to the js load indicator in index.html
 const jsLoadIndicator = document.querySelector("#js-load-indicator");
@@ -8,9 +9,17 @@ const jsLoadIndicator = document.querySelector("#js-load-indicator");
 const endpoint = "https://api.whatdoestrumpthink.com/api/v1/quotes/random";
 
 // Function that assigns the quote variable to the textContent property of quoteText variable
+// and calls on setTwitterButton fucntion using quote variable as parameter
 function displayQuote(quote) {
     const quoteText = document.querySelector("#js-quote-text");
     quoteText.textContent = quote;
+    setTwitterButton(quote);
+}
+
+// Function that assigns the href attribute the value of
+// https://twitter.com/share?text=${quote} - Donald Trump 
+function setTwitterButton (quote) {
+    twitterButton.href = `https://twitter.com/share?text=${quote} - Donald Trump`;
 }
 
 // Asynchronous function that displays a new quote with flow and error handling
@@ -27,7 +36,8 @@ async function getQuote() {
         const json = await response.json();
         displayQuote(json.message);
     }
-    catch {
+    catch(error) {
+        console.log("Failed to fetch new quote:", error)
         alert("Failed to fetch new quote.");
     }
     finally {
@@ -38,5 +48,9 @@ async function getQuote() {
     }
 }
 
-// Adds an event listener that invokes getQuote function when newQuoteButton is clicked 
+// Adds event listeners that invoke getQuote function when newQuoteButton is clicked and 
+// opens a window to tweet when twitter button is clicked 
 newQuoteButton.addEventListener("click", getQuote);
+twitterButton.addEventListener("click", function() {
+    window.open(twitterButton.href, "_blank", "width=600,height=300")
+});
