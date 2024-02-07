@@ -54,3 +54,5 @@ newQuoteButton.addEventListener("click", getQuote);
 twitterButton.addEventListener("click", function() {
     window.open(twitterButton.href, "_blank", "width=600,height=300")
 });
+
+getQuote();
